@@ -99,7 +99,7 @@ strong {
     outline-offset: 2px;
 }
 
-@media (max-width: 300px) {
+@media (max-width: 500px) {
     body {
         padding: 10px;
     }
@@ -126,6 +126,6 @@ strong {
     }
 
     .project-image {
-        max-width: 50%;
+        max-width: 75%;
     }
 }
