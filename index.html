@@ -1,0 +1,133 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Resume of Austin Wu, IT student specializing in cybersecurity">
+    <title>Austin Wu - Resume</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="austin-photo.jpg" alt="Austin Wu headshot" class="profile-photo">
+            <div>
+                <h1>Austin Wu</h1>
+                <nav aria-label="Contact and professional links">
+                    <ul>
+                        <li><a href="mailto:au401196@ucf.edu" aria-label="Email Austin Wu">au401196@ucf.edu</a></li>
+                        <li><a href="https://www.linkedin.com/in/austin-wu-5ba043264/" target="_blank" rel="noopener" aria-label="Austin Wu's LinkedIn profile">LinkedIn Profile</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section aria-labelledby="objective-heading">
+            <h2 id="objective-heading">Professional Objective</h2>
+            <p>Dedicated IT student actively developing skills in cybersecurity. Aiming to apply software and hardware knowledge to enhance system security. Committed to improving the effectiveness of IT systems through innovative solutions.</p>
+        </section>
+
+        <section aria-labelledby="education-heading">
+            <h2 id="education-heading">Education</h2>
+            <article>
+                <h3>Bachelor of Science in Information Technology</h3>
+                <p><strong>University of Central Florida</strong>, Orlando, FL</p>
+                <p><strong>Expected Graduation:</strong> May 2026</p>
+            </article>
+        </section>
+
+        <section aria-labelledby="experience-heading">
+            <h2 id="experience-heading">Work Experience</h2>
+            <article>
+                <h3>JAL Accounting, Davie, FL (Remote since 2022)</h3>
+                <p><strong>June 2021 - August 2024</strong></p>
+                <ul>
+                    <li>Managed and analyzed financial records for 25+ clients, ensuring precise data.</li>
+                    <li>Identified and resolved data discrepancies with high accuracy through successful client communications.</li>
+                    <li>Maintained confidentiality of client financial data.</li>
+                    <li>Optimized workflow and organization using cloud-based storage tools and automated file transfers.</li>
+                </ul>
+            </article>
+        </section>
+
+        <section aria-labelledby="projects-heading">
+            <h2 id="projects-heading">Projects</h2>
+            <article>
+                <h3>Hill Cipher Encryption Program</h3>
+                <p><strong>University of Central Florida</strong>, Course Project (Fall 2024)</p>
+                <ul>
+                    <li>Developed a Python program to encrypt alphabetic letters in a text file using a Hill cipher algorithm.</li>
+                    <li>Validated processes, achieving 100% success rate for test cases.</li>
+                    <li>Debugged and optimized code to handle more complex test cases effectively.</li>
+                </ul>
+            </article>
+            <article>
+                <h3>News Article Website</h3>
+                <p><strong>University of Central Florida</strong>, Course Project (Spring 2025)</p>
+                <ul>
+                    <li>Designed and built a dynamic website showcasing news articles from verified sources.</li>
+                    <li>Ensured minimal bias and maximum integrity in content presentation.</li>
+                    <li>Automated updates using trusted APIs to refresh news articles.</li>
+                </ul>
+            </article>
+        </section>
+
+        <section aria-labelledby="skills-heading">
+            <h2 id="skills-heading">Skills</h2>
+            <ul>
+                <li>Python</li>
+                <li>Java</li>
+                <li>SQL</li>
+            </ul>
+        </section>
+
+        <section aria-labelledby="certifications-heading">
+            <h2 id="certifications-heading">Certifications</h2>
+            <ul>
+                <li>CompTIA A+</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
