@@ -99,7 +99,7 @@ strong {
     outline-offset: 2px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 300px) {
     body {
         padding: 10px;
     }
